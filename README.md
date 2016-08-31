@@ -5,7 +5,7 @@
 Tested with npm@3.
 
 ```bash
-$ npm i
+$ npm install
 $ react-native run-ios
 ```
 
