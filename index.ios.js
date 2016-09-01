@@ -13,8 +13,8 @@ import {
   Button,
   TouchableHighlight,
 } from 'react-native';
+
 import dva, { connect } from 'dva/mobile';
-import { put, call } from 'dva/effects';
 
 function delay(timeout) {
   return new Promise(resolve => {
@@ -30,16 +30,16 @@ app.model({
     add(state) { return state + 1 },
   },
   effects: {
-    *'add/delay'() {
+    *addDelay(action, { call, put }) {
       yield call(delay, 1000);
       yield put({ type: 'add' });
     },
   },
-  subscriptions: [
-    function({ dispatch }) {
-      dispatch({ type: 'add' });
+  subscriptions: {
+    setup({ dispatch }) {
+      dispatch({type: 'add'});
     },
-  ],
+  },
 });
 
 const App = connect(({ count }) => ({ count }))((props) => {
@@ -49,10 +49,10 @@ const App = connect(({ count }) => ({ count }))((props) => {
       <Text style={styles.welcome}>
         Count: { count }
       </Text>
-      <TouchableHighlight onPress={() => { dispatch({ type: 'add' }) }}>
+      <TouchableHighlight onPress={() => { dispatch({ type: 'count/add' }) }}>
         <Text>Add</Text>
       </TouchableHighlight>
-      <TouchableHighlight onPress={() => { dispatch({ type: 'add/delay' }) }}>
+      <TouchableHighlight onPress={() => { dispatch({ type: 'count/addDelay' }) }}>
         <Text>Delay Add</Text>
       </TouchableHighlight>
     </View>
